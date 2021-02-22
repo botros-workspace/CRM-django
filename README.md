@@ -1,2 +1,2 @@
 # CRM-django
-CRM built using Django and python 
+CRM built using Django in python 
