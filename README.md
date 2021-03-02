@@ -6,3 +6,4 @@ CRM built using Django in python
 4- To add the requirments.txt to your project -----> pip freeze > requirments.txt
 5- start Project -----> django-admin startproject project_name . 
 6- create an app in your project -----> python manage.py startapp app name
+7- create a super user ----->python manage.py createsuperuser
