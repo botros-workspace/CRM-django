@@ -1,12 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>CRM</title>
-</head>
-<body>
-    <a href = "{% url 'leads:lead-list' %}"> Back to leads</a>
+{% extends 'base.html' %}
+{% block content %}
+  <a href = "{% url 'leads:lead-list' %}"> Back to leads</a>
     <hr />
     <h1>Create a new Lead</h1>
     <form method ="post">
@@ -14,5 +8,4 @@
         {{form.as_p}}
         <button type = "submit">Submit</button>
     </form>
-</body>
-</html>
+{% endblock content %}

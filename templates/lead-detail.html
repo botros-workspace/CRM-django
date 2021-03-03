@@ -1,15 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>CRM</title>
-</head>
-<body>
-    <a href ="{% url 'leads:lead-list' %}" Back to Leads</a>
+{% extends 'base.html' %}
+{% block content %}
+  <a href ="{% url 'leads:lead-list' %}" Back to Leads</a>
     <hr />
     <h1>This is the information for the lead {{lead.first_name}}</h1>
     <a href ="{% url 'leads:lead-update' lead.pk%}">Update</a>
     <a href ="{% url 'leads:lead-delete' lead.pk%}">Delete</a>
-</body>
-</html>
+{% endblock content %}
