@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CRM</title>
+    <style>
+        .lead {
+            padding-top:10px;
+            padding-bottom:10px;
+            padding-left:10px;
+            padding-right:10px;
+            margin-top :10px;
+            backgroung-color: #f6f6f6;
+            width: 50%;
+        }
+    </style>
+</head>
+<body>
+        <h1>This is all our leads</h1>
+        {% for lead in leads %}
+            <div class ="lead">
+                {{lead.first_name}} {{lead.last_name}}
+            </div>
+        {% endfor %}
+    </body>
+</html>
