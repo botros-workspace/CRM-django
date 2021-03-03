@@ -4,7 +4,7 @@ from .forms import LeadModelForm
 
 def landing_page(request):
     return render(request, "landing-page.html")
-    
+
 def lead_list(request):
     leads = Lead.objects.all()
     context = {
@@ -35,10 +35,10 @@ def lead_update(request,pk):
     lead = Lead.objects.get(id=pk)
     form = LeadModelForm(instance = lead)
     if request.method =="POST":
-        form = LeadModelForm(request.POST)
+        form = LeadModelForm(request.POST, instance= lead)
         if form.is_valid():
             form.save()
-            return redirect("/leads")
+            return redirect("/leads/"+str(pk))
     context = {
         'form' : form,
         'lead' : lead
