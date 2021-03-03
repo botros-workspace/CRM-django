@@ -6,10 +6,10 @@
     <title>CRM</title>
 </head>
 <body>
-    <a href = "/leads"> Back to Leads</a>
+    <a href ="{% url 'leads:lead-list' %}" Back to Leads</a>
     <hr />
     <h1>This is the information for the lead {{lead.first_name}}</h1>
-    <a href ="/leads/{{lead.pk}}/update/">Update</a>
-    <a href ="/leads/{{lead.pk}}/delete/">Delete</a>
+    <a href ="{% url 'leads:lead-update' lead.pk%}">Update</a>
+    <a href ="{% url 'leads:lead-delete' lead.pk%}">Delete</a>
 </body>
 </html>

@@ -6,7 +6,7 @@
     <title>CRM</title>
 </head>
 <body>
-    <a href = "/leads"> Back to leads</a>
+    <a href = "{% url 'leads:lead-list' %}"> Back to leads</a>
     <hr />
     <h1>Update {{lead.first_name}}{{lead.last_name}}</h1>
     <form method ="post">
