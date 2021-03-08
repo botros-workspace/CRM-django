@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from .models import Lead
 from django.views import generic
@@ -15,17 +16,17 @@ class SignupView(generic.CreateView):
 class LandingPageView(generic.TemplateView):
     template_name = "landing-page.html"
 
-class LeadListView(generic.ListView):
+class LeadListView(LoginRequiredMixin, generic.ListView):
     template_name= "lead-list.html"
     queryset= Lead.objects.all()
     context_object_name = "leads"
 
-class LeadDetailView(generic.DetailView):
+class LeadDetailView(LoginRequiredMixin, generic.DetailView):
     template_name= "lead-detail.html"
     queryset= Lead.objects.all()
     context_object_name = "lead"
 
-class LeadCreateView(generic.CreateView):
+class LeadCreateView(LoginRequiredMixin, generic.CreateView):
     template_name= "lead-create.html"
     form_class= LeadModelForm
     
@@ -41,7 +42,7 @@ class LeadCreateView(generic.CreateView):
         )
         return super(LeadCreateView, self).form_valid(form)
 
-class LeadUpdateView(generic.UpdateView):
+class LeadUpdateView(LoginRequiredMixin, generic.UpdateView):
     template_name= "lead-update.html"
     form_class= LeadModelForm
     queryset = Lead.objects.all()
@@ -49,7 +50,7 @@ class LeadUpdateView(generic.UpdateView):
     def get_success_url(self):
         return reverse("leads:lead-list")
 
-class LeadDeleteView(generic.DeleteView):
+class LeadDeleteView(LoginRequiredMixin, generic.DeleteView):
     template_name= "lead-delete.html"
     queryset = Lead.objects.all()
    
