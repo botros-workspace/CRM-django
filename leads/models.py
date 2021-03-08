@@ -8,6 +8,11 @@ class User(AbstractUser):
     #and remove the pass
     pass
 
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete= models.CASCADE)
+    def __str__(self):
+        return self.user.username
+    
 class Lead(models.Model):
     first_name = models.CharField(max_length= 20)
     last_name = models.CharField(max_length=20)
@@ -18,6 +23,7 @@ class Lead(models.Model):
     
 class Agent(models.Model):
     user = models.OneToOneField(User, on_delete= models.CASCADE)
+    userProfile = models.ForeignKey(UserProfile, on_delete= models.CASCADE)
     #all the Agent fields are defined in the Abstract User Class
     #which is passed through the 'user = models.OneToOneField(User)'
     def __str__(self):
