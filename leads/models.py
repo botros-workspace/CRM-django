@@ -20,15 +20,15 @@ class Lead(models.Model):
     age = models.IntegerField(default=0)
     agent = models.ForeignKey("Agent", on_delete= models.CASCADE)
     def __str__(self):
-        return self.first_name + self.last_name
+        return f"{self.first_name}{self.last_name}"
     
 class Agent(models.Model):
     user = models.OneToOneField(User, on_delete= models.CASCADE)
-    userProfile = models.ForeignKey(UserProfile, on_delete= models.CASCADE)
+    organisation = models.ForeignKey(UserProfile, on_delete= models.CASCADE)
     #all the Agent fields are defined in the Abstract User Class
     #which is passed through the 'user = models.OneToOneField(User)'
     def __str__(self):
-        return self.user.email
+        return self.user.username
     
 def post_user_created_signal(sender, instance, created, **kwargs):
     if created:
