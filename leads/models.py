@@ -7,7 +7,8 @@ class User(AbstractUser):
     #if u want to add other fields to the user class
     #example:  cellPhone = models.CharField(max_length= 15)
     #and remove the pass
-    pass
+    is_organizer = models.BooleanField(default=True)
+    is_agent = models.BooleanField(default=False)  
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete= models.CASCADE)
