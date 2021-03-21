@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from .models import Lead
 from django.views import generic
-from .forms import LeadModelForm, CustomUserCreationForm
+from .forms import LeadModelForm, CustomUserCreationForm, AssignAgentForm
 from agents.mixins import OrganizerAndLoginRequiredMixin
 
 #class based View
@@ -91,6 +91,27 @@ class LeadDeleteView(OrganizerAndLoginRequiredMixin, generic.DeleteView):
    
     def get_success_url(self):
         return reverse("leads:lead-list")
+
+class AssignAgentView(OrganizerAndLoginRequiredMixin, generic.FormView):
+    template_name = "assign-agent.html"
+    form_class = AssignAgentForm
+
+    def get_form_kwargs(self, **kwargs):
+        kwargs = super(AssignAgentView, self).get_form_kwargs(**kwargs)
+        kwargs.update({
+            "request":self.request
+        })
+        return kwargs
+
+    def get_success_url(self):
+        return reverse("leads:lead-list")
+
+    def form_valid(self, form):
+        agent = form.cleaned_data["agent"]
+        lead = Lead.objects.get(id = self.kwargs["pk"])
+        lead.agent = agent
+        lead.save()
+        return super(AssignAgentView, self).form_valid(form)
 
 #function based View
 def landing_page(request):
