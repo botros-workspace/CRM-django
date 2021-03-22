@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from .models import Lead, Category
 from django.views import generic
-from .forms import LeadModelForm, CustomUserCreationForm, AssignAgentForm
+from .forms import LeadModelForm, CustomUserCreationForm, AssignAgentForm, LeadCategoryUpdateForm
 from agents.mixins import OrganizerAndLoginRequiredMixin
 
 #class based View
@@ -143,6 +143,15 @@ class CategoryListView(LoginRequiredMixin, generic.ListView):
 class CategoryDetailView(LoginRequiredMixin, generic.DetailView):
     template_name = "category-detail.html"
     context_object_name = "category"
+    #use this method when you want to perform a more complex queryset, instead of rendering through the leads that belongs to that category inside of the html 
+    #  def get_context_data(self, **kwargs):
+    #     context = super(CategoryListView, self).get_context_data(**kwargs)
+    #     leads = self.get_object().leads.all()
+    #     context.update({
+    #         "leads": leads
+    #     })
+    #     return context 
+        
     def get_queryset(self):
         user = self.request.user
 
@@ -152,9 +161,26 @@ class CategoryDetailView(LoginRequiredMixin, generic.DetailView):
             queryset = Category.objects.filter(organization = user.agent.organization)
         return queryset
 
+class LeadCategoryUpdateView(LoginRequiredMixin, generic.UpdateView):
+    template_name= "lead-category-update.html"
+    form_class= LeadCategoryUpdateForm
+    
+    def get_queryset(self):
+        user = self.request.user
+
+        if user.is_organizer:
+            queryset = Lead.objects.filter(organization = user.userprofile)
+        else:
+            queryset = Lead.objects.filter(organization = user.agent.organization)
+            queryset = queryset.filter(agent__user = user)
+        return queryset
+
+    def get_success_url(self):
+        return reverse("leads:lead-detail", kwargs={"pk": self.get_object().id})
+
 #function based View
 def landing_page(request):
-    return render(request, "landing-page.html")
+    return render(request, "landing-page.html", )
 
 def lead_list(request):
     leads = Lead.objects.all()
