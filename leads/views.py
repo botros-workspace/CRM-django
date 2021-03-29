@@ -12,7 +12,7 @@ class SignupView(generic.CreateView):
     form_class= CustomUserCreationForm
     
     def get_success_url(self):
-        return reverse("landing-page")
+        return reverse("login")
 
 class LandingPageView(generic.TemplateView):
     template_name = "landing-page.html"
@@ -124,10 +124,10 @@ class CategoryListView(LoginRequiredMixin, generic.ListView):
         if user.is_organizer:
             queryset = Lead.objects.filter(organization= user.userprofile)
         else:
-            queryset = Lead.objects.filter(organization= agent.organization)
+            queryset = Lead.objects.filter(organization= user.agent.organization)
 
         context.update({
-            "unassigned_lead_count": queryset.filter(categoory__isnull = True).count()
+            "unassigned_lead_count": queryset.filter(category__isnull = True).count()
         })
         return context
 

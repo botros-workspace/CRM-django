@@ -1,11 +1,14 @@
 {% extends 'base.html' %}
+{% load tailwind_filters %}
+
 {% block content %}
-<a href = "{% url 'leads:lead-list' %}"> Back to leads</a>
-    <hr />
-    <h1>Are you sure you want to delete that Lead</h1>
-    <form method ="post">
-        {% csrf_token %}
-        {{form.as_p}}
-        <button type = "submit">Submit</button>
-    </form>
+<div class ="max-w-lg mx-auto">
+    <a class = "border-b border-gray-300 flex "href ="{% url 'leads:lead-update' lead.pk%}"> Back</a>
+    <h1 class = "mt-5 text-2xl">Are you sure you want to delete that lead?</h1>
+        <form method ="post">
+            {% csrf_token %}
+            {{form|crispy}}
+            <button class = "text-center mt-6 text-white w-full bg-gray-500 hover:bg-red-400 px-3 py-2 rounded-md"type = "submit">Delete</button>
+        </form>
+</div>
 {% endblock content %}
