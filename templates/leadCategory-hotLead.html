@@ -1,22 +1,24 @@
-
-
 {% extends 'base.html' %}
-{% block content %}
-{% include "navbar.html" %}
 
+{% block content %}
+<header class="text-gray-600 body-font">
+    <div class="mt-5 mb-5 max-w-lg mx-auto">
+      <a href = "{% url 'leads:category-list' %}" class="text-white inline-flex items-center bg-gray-500 border-0 py-1 px-3 focus:outline-none hover:bg-blue-400 rounded text-base mt-4 md:mt-0">Back
+      </a>
+    </div>
+</header>
 <section class="text-gray-600 body-font">
-    <div class="container px-5 py-24 mx-auto flex flex-wrap">
-    <div class= "w-full mb-6 py-6 flex justify-between item-center border-b border-grey-200">
-        <div>
-            <h1 class="text-4xl text-grey-800">Agents</h1>
-        </div>
-        <div>
-            {% if request.user.is_organizer %}
-                 <a class = "text-gray-500 hover:text-blue-500" href = "{% url 'agents:agent-create' %}"> Create a new Agent </a>
-            {% endif %}
-        </div>
-    </div>  
-    <div class=" -m-4 w-full">
+  <div class="container mx-auto flex px-5 py-5 items-center justify-center flex-col">
+    <div class="text-center w-full">
+      <h1 class="title-font sm:text-4xl text-5xl mb-4 font-medium text-gray-900">Hot Lead</h1>
+        <p class="mb-8 leading-relaxed">This type of qualified lead meets all the required criteria which most of the time is set. So how to know if it’s a hot lead? Simple. Apply the BANT lead qualifying system.
+            B is for Budget: The prospect has set or prepared a budget and is just ready for disposal at anytime a project proposal is approved by the management.  
+            A for Authority: The contact person you speak to could either be the Person In charge, or the Recommender. He should have the final word to either say “yes” or “no” to the proposal.
+            N is for Need: Need would always top the set of qualifying questions in a telemarketing script. When a need from the prospect is identified, this sends a signal of a brewing lead.
+            T is for Time frame: The point period from the time you spoke with the prospect to the planned or projected period of purchase or implementation of the new product or service.
+        </p>
+      <div class="flex justify-center">
+        <div class=" -m-4 w-full">
     <div class="overflow-x-auto ">
         <div class="w-full flex font-sans">
             <div class="w-full">
@@ -25,45 +27,57 @@
                         <thead>
                             <tr class="bg-gray-800 text-white uppercase text-sm leading-normal">
                                 <th class="py-3 px-6 text-left">Lead</th>
-                                <th class="py-3 px-6 text-left">Email</th>
-                                <th class="py-3 px-6 text-center">Phone</th>
-                                <th class="py-3 px-6 text-center">UserName</th>
-                                <th class="py-3 px-6 text-center">Age</th>
+                                <th class="py-3 px-6 text-left">Phone</th>
+                                <th class="py-3 px-6 text-center">Email</th>
+                                <th class="py-3 px-6 text-center">Contacted</th>
+                                <th class="py-3 px-6 text-center">Category</th>
+                                {% if request.user.is_organizer %}
                                 <th class="py-3 px-6 text-center">Edit</th>
+                                {% else %}
+                                <th class="py-3 px-6 text-center">View</th>
+                                {% endif %}
                             </tr>
                         </thead>
                         <tbody class="text-gray-600 text-sm font-light">
-                        {% for agent in object_list %}
+                        {% for lead in leads %}
                             <tr class="border-b border-gray-200 hover:bg-gray-300">
                                 <td class="py-3 px-6 text-left whitespace-nowrap">
                                     <div class="flex items-center">
-                                        <span class="font-medium text-black">{{agent.user.first_name}} {{agent.user.last_name}}</span>
+                                        <span class="font-medium text-black">{{lead.first_name}} {{lead.last_name}}</span>
                                     </div>
                                 </td>
-                                 <td class="py-3 text-left">
+                                <td class="py-3 px-6 text-left">
+                                    <div class="text-black items-center">
+                                        <span>{{lead.phone_number}}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-center">
                                     <div class=" text-black items-center justify-center">
-                                        <span>{{agent.user.email}}</span>
-                                    </div>
-                                </td>
-                                <td class="py-3  text-center">
-                                    <div class="text-black items-center">
-                                        <span>{{agent.user.phone_number}}</span>
+                                        <span>{{lead.email}}</span>
                                     </div>
                                 </td>
                                 <td class="py-3 px-6 text-center">
-                                    <div class="text-black items-center">
-                                        <span>{{agent.user.username}}</span>
-                                    </div>
+                                    {% if lead.contacted %}
+                                    <a href ="{% url 'leads:lead-category-update' lead.pk%}" class ="text-black py-1 px-3 rounded-full bg-yellow-400 hover:bg-blue-400 ml-10">
+                                        Contacted
+                                    </a>
+                                    {% else %}
+                                    <a href ="{% url 'leads:lead-category-update' lead.pk%}" class ="text-black py-1 px-3 rounded-full bg-red-800 text-white hover:bg-green-400 ml-10">
+                                        Not Contacted
+                                    </a>
+                                    {% endif %}
                                 </td>
-                                <td class="py-3 px-6 text-center">
-                                    <div class="text-black items-center">
-                                        <span>{{agent.user.age}}</span>
+                                  <td class="py-3 px-6 text-center whitespace-nowrap">
+                                    <div class=" items-center">
+                                    <a href ="{% url 'leads:lead-category-update' lead.pk%}" class ="ml-10">
+                                        <span class="hover:text-blue-400 font-medium">{{lead.category}}</span>
+                                    </a>
                                     </div>
                                 </td>
                                 <td class="py-3 px-6 text-center">
                                     <div class="flex item-center justify-center">
                                         <div class="w-4 mr-2 transform hover:text-blue-400 hover:scale-110">
-                                        <a href  = "{% url 'agents:agent-detail' agent.pk %}">
+                                        <a href  = "{% url 'leads:lead-detail' lead.pk %}">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -72,14 +86,14 @@
                                         </div>
                                         {% if request.user.is_organizer %}
                                         <div class="w-4 mr-2 transform hover:text-yellow-400 hover:scale-110">
-                                        <a href  = "{% url 'agents:agent-update' agent.pk %}">
+                                        <a href  = "{% url 'leads:lead-update' lead.pk %}">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                                             </svg>
                                         </a>
                                         </div>
                                         <div class="w-4 mr-2 transform hover:text-red-500 hover:scale-110">
-                                        <a href  = "{% url 'agents:agent-delete' agent.pk %}">
+                                        <a href  = "{% url 'leads:lead-delete' lead.pk %}">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                             </svg>
@@ -96,7 +110,8 @@
             </div>
         </div>
     </div>
+      </div>
+    </div>
   </div>
 </section>
 {% endblock content %}
-

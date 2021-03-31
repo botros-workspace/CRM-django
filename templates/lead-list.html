@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
+{% include "navbar.html" %}
+
 <section class="text-gray-600 body-font">
-  <div class="container px-5 py-24 mx-auto flex flex-wrap">
-  <div class= "w-full mb-6 py-6 flex justify-between item-center border-b border-grey-200">
+    <div class="container px-5 py-24 mx-auto flex flex-wrap">
+    <div class= "w-full mb-6 py-6 flex justify-between item-center border-b border-grey-200">
         <div>
-            <h1 class="text-4xl text-grey-800">Leads</h1>
-            <a class = "text-gray-500 hover:text-blue-500" href = "{% url 'leads:category-list' %}"> View Categories </a>
+            <h1 class="text-4xl text-grey-800">Assigned Leads</h1>
         </div>
         <div>
             {% if request.user.is_organizer %}
@@ -13,56 +14,209 @@
             {% endif %}
         </div>
     </div>  
-    <div class="flex flex-wrap -m-4">
-        {% for lead in leads %}
-            <div class="p-4 lg:w-1/2 md:w-full">
-                <div class="flex border-2 rounded-lg border-gray-200 border-opacity-50 p-8 sm:flex-row flex-col">
-                <div class="w-16 h-16 sm:mr-8 sm:mb-0 mb-4 inline-flex items-center justify-center rounded-full bg-indigo-100 text-indigo-500 flex-shrink-0">
-                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10" viewBox="0 0 24 24">
-                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
-                    <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                </div>
-                <div class="flex-grow">
-                    <h2 class="text-gray-900 text-lg title-font font-medium mb-3">{{lead.first_name}}{{lead.last_name}}</h2>
-                    <p class="leading-relaxed text-base">Blue bottle crucifix vinyl post-ironic four dollar toast vegan taxidermy. Gastropub indxgo juice poutine.</p>
-                    <a href = "{% url 'leads:lead-detail' lead.pk %}" class="mt-3 text-indigo-500 inline-flex items-center">View Detail
-                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
-                        <path d="M5 12h14M12 5l7 7-7 7"></path>
-                    </svg>
-                    </a>
-                </div>
+    <div class=" -m-4 w-full">
+    <div class="overflow-x-auto ">
+        <div class="w-full flex font-sans">
+            <div class="w-full">
+                <div class="bg-white shadow-md rounded my-6">
+                    <table class="min-w-max w-full table-auto">
+                        <thead>
+                            <tr class="bg-gray-800 text-white uppercase text-sm leading-normal">
+                                <th class="py-3 px-6 text-left">Lead</th>
+                                <th class="py-3 px-6 text-left">Phone</th>
+                                <th class="py-3 px-6 text-center">Email</th>
+                                {% if request.user.is_organizer %}
+                                <th class="py-3 px-6 text-center">Agent</th>
+                                {% endif %}
+                                <th class="py-3 px-6 text-center">Contacted</th>
+                                <th class="py-3 px-6 text-center">Category</th>
+                                {% if request.user.is_organizer %}
+                                <th class="py-3 px-6 text-center">Edit</th>
+                                {% else %}
+                                <th class="py-3 px-6 text-center">View</th>
+                                {% endif %}
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-600 text-sm font-light">
+                        {% for lead in leads %}
+                            <tr class="border-b border-gray-200 hover:bg-gray-300">
+                                <td class="py-3 px-6 text-left whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <span class="font-medium text-black">{{lead.first_name}} {{lead.last_name}}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-left">
+                                    <div class="text-black items-center">
+                                        <span>{{lead.phone_number}}</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-center">
+                                    <div class=" text-black items-center justify-center">
+                                        <span>{{lead.email}}</span>
+                                    </div>
+                                </td>
+                                {% if request.user.is_organizer %}
+                                <td class="py-3 px-6 text-center">
+                                    <div class=" text-black items-center justify-center">
+                                        <span>{{lead.agent}}</span>
+                                    </div>
+                                </td>
+                                {% endif %}
+                                <td class="py-3 px-6 text-center">
+                                    {% if lead.contacted %}
+                                    <a href ="{% url 'leads:lead-category-update' lead.pk%}" class ="text-black py-1 px-3 rounded-full bg-yellow-400 hover:bg-blue-400 ml-10">
+                                        Contacted
+                                    </a>
+                                    {% else %}
+                                    <a href ="{% url 'leads:lead-category-update' lead.pk%}" class ="text-black py-1 px-3 rounded-full bg-red-800 text-white hover:bg-green-400 ml-10">
+                                        Not Contacted
+                                    </a>
+                                    {% endif %}
+                                </td>
+                                  <td class="py-3 px-6 text-center whitespace-nowrap">
+                                    <div class=" items-center">
+                                    <a href ="{% url 'leads:lead-category-update' lead.pk%}" class ="ml-10">
+                                        <span class="hover:text-blue-400 font-medium">{{lead.category}}</span>
+                                    </a>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-6 text-center">
+                                    <div class="flex item-center justify-center">
+                                        <div class="w-4 mr-2 transform hover:text-blue-400 hover:scale-110">
+                                        <a href  = "{% url 'leads:lead-detail' lead.pk %}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                            </svg>
+                                        </a>
+                                        </div>
+                                        {% if request.user.is_organizer %}
+                                        <div class="w-4 mr-2 transform hover:text-yellow-400 hover:scale-110">
+                                        <a href  = "{% url 'leads:lead-update' lead.pk %}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                            </svg>
+                                        </a>
+                                        </div>
+                                        <div class="w-4 mr-2 transform hover:text-red-500 hover:scale-110">
+                                        <a href  = "{% url 'leads:lead-delete' lead.pk %}">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                        </a>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        {% endfor %}
-         </div>
+        </div>
+    </div>
+
+        
+    </div>
         {% if unassigned_leads.exists %}
-            <div class="mt-5 flex flex-wrap -m-4">    
-                <div class="p-4 w-full" >
+                <div class="mb-6 border-b border-grey-200 p-4 w-full" >
                     <h1 class="text-4xl text-grey-800">Unassigned Leads</h1>
                 </div>
-                    {% for lead in unassigned_leads %}
-                          <div class="p-4 lg:w-1/2 md:w-full">
-                                <div class="flex border-2 rounded-lg border-gray-200 border-opacity-50 p-8 sm:flex-row flex-col">
-                                <div class="w-16 h-16 sm:mr-8 sm:mb-0 mb-4 inline-flex items-center justify-center rounded-full bg-indigo-100 text-indigo-500 flex-shrink-0">
-                                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10" viewBox="0 0 24 24">
-                                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
-                                    <circle cx="12" cy="7" r="4"></circle>
-                                    </svg>
-                                </div>
-                                <div class="flex-grow">
-                                    <h2 class="text-gray-900 text-lg title-font font-medium mb-3">{{lead.first_name}}{{lead.last_name}}</h2>
-                                    <p class="leading-relaxed text-base">Blue bottle crucifix vinyl post-ironic four dollar toast vegan taxidermy. Gastropub indxgo juice poutine.</p>
-                                    <a href = "{% url 'leads:assign-agent' lead.pk %}" class="mt-3 text-indigo-500 inline-flex items-center">Assign Agent
-                                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-2" viewBox="0 0 24 24">
-                                        <path d="M5 12h14M12 5l7 7-7 7"></path>
-                                    </svg>
-                                    </a>
-                                </div>
+                <div class="w-full -m-4">    
+                   <div class="overflow-x-auto ">
+                        <div class="w-full flex font-sans">
+                            <div class="w-full">
+                                <div class="bg-white shadow-md rounded my-6">
+                                    <table class="min-w-max w-full table-auto">
+                                        <thead>
+                                            <tr class="bg-gray-800 text-white uppercase text-sm leading-normal">
+                                                <th class="py-3 px-6 text-left">Lead</th>
+                                                <th class="py-3 px-6 text-left">Phone</th>
+                                                <th class="py-3 px-6 text-center">Email</th>
+                                                <th class="py-3 px-6 text-center">Contacted</th>
+                                                <th class="py-3 px-6 text-center">Category</th>
+                                                {% if request.user.is_organizer %}
+                                                <th class="py-3 px-6 text-center">Edit</th>
+                                                {% else %}
+                                                <th class="py-3 px-6 text-center">View</th>
+                                                {% endif %}
+                                                
+                                            </tr>
+                                        </thead>
+                                        <tbody class="text-gray-600 text-sm font-light">
+                                        {% for lead in unassigned_leads %}
+                                            <tr class="border-b border-gray-200 hover:bg-gray-300">
+                                                <td class="py-3 px-6 text-left whitespace-nowrap">
+                                                    <div class="flex items-center">
+                                                        <span class="font-medium text-black">{{lead.first_name}} {{lead.last_name}}</span>
+                                                    </div>
+                                                </td>
+                                                <td class="py-3 px-6 text-left">
+                                                    <div class="text-black items-center">
+                                                        <span>{{lead.phone_number}}</span>
+                                                    </div>
+                                                </td>
+                                                <td class="py-3 px-6 text-center">
+                                                    <div class=" text-black items-center justify-center">
+                                                        <span>{{lead.email}}</span>
+                                                    </div>
+                                                </td>
+                                                <td class="py-3 px-6 text-center">
+                                                    {% if lead.contacted %}
+                                                    <a href ="{% url 'leads:lead-category-update' lead.pk%}" class ="text-black py-1 px-3 rounded-full bg-yellow-400 hover:bg-blue-400 ml-10">
+                                                        Contacted
+                                                    </a>
+                                                    {% else %}
+                                                    <a href ="{% url 'leads:lead-category-update' lead.pk%}" class =" py-1 px-3 rounded-full bg-red-800 text-white hover:bg-green-400 ml-10">
+                                                        Not Contacted
+                                                    </a>
+                                                    {% endif %}
+                                                </td>
+                                                <td class="py-3 px-6 text-center whitespace-nowrap">
+                                                    <div class=" items-center">
+                                                    <a href ="{% url 'leads:lead-category-update' lead.pk%}" class ="ml-10">
+                                                        <span class="hover:text-blue-400 font-medium">{{lead.category}}</span>
+                                                    </a>
+                                                    </div>
+                                                </td>
+                                                <td class="py-3 px-6 text-center">
+                                                    <div class="flex item-center justify-center">
+                                                        <div class="w-4 mr-2 transform hover:text-blue-400 hover:scale-110">
+                                                        <a href  = "{% url 'leads:lead-detail' lead.pk %}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                            </svg>
+                                                        </a>
+                                                        </div>
+                                                        {% if request.user.is_organizer %}
+                                                        <div class="w-4 mr-2 transform hover:text-yellow-400 hover:scale-110">
+                                                        <a href  = "{% url 'leads:lead-update' lead.pk %}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                                            </svg>
+                                                        </a>
+                                                        </div>
+                                                        <div class="w-4 mr-2 transform hover:text-red-500 hover:scale-110">
+                                                        <a href  = "{% url 'leads:lead-delete' lead.pk %}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                            </svg>
+                                                        </a>
+                                                        </div>
+                                                        {% endif %}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
-                {% endfor %}
-            {% endif %}
+                        </div>
+                    </div>
+        {% endif %}
         </div>
         </div>
     </div>

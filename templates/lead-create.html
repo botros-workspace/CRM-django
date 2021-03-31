@@ -2,14 +2,22 @@
 {% load tailwind_filters %}
 
 {% block content %}
-  <div class= "max-w-lg mx-auto">
+
+<header class="text-gray-600 body-font">
+    <div class="mt-5 mb-5 max-w-lg mx-auto">
+      <a href = "{% url 'leads:lead-list' %}" class="text-white inline-flex items-center bg-gray-500 border-0 py-1 px-3 focus:outline-none hover:bg-blue-400 rounded text-base mt-4 md:mt-0">Back
+      </a>
+    </div>
+    
+</header>
+<div class= "max-w-lg mx-auto">
     <div>
       <h1 class = "text-4xl text-gray-800 ">Create a new Lead</h1>
     </div>
       <form class = "mt-10"method ="post">
           {% csrf_token %}
           {{form|crispy}}
-          <button class = "mt-1 text-white w-full bg-gray-500 hover:bg-blue-400 px-3 py-2 rounded-md"type = "submit">Submit</button>
+          <button class = "mt-1 text-white w-full bg-gray-500 hover:bg-blue-400 px-3 py-2 rounded-md mb-20"type = "submit">Create</button>
       </form>
   </div>
 {% endblock content %}

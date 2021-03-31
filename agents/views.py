@@ -24,7 +24,7 @@ class AgentCreateView(OrganizerAndLoginRequiredMixin, generic.CreateView):
         user = form.save(commit = False)
         user.is_agent = True
         user.is_organizer = False
-        user.set_password(f"{random.randint(0,10000000)}")
+        password = user.set_password(f"{random.randint(0,10000000)}")
         user.save()
         Agent.objects.create(
             user= user,
@@ -32,7 +32,7 @@ class AgentCreateView(OrganizerAndLoginRequiredMixin, generic.CreateView):
         )
         send_mail(
             subject="Invetaion",
-            message="Yo were added as an agent on CRM. Please come login to start working",
+            message="You were added as an agent on CRM. Please come login to start working, go to http://127.0.0.1:8000/reset-password/ to reset your password",
             from_email="admin@CRM.com",
             recipient_list=[user.email]
         )
@@ -48,8 +48,11 @@ class AgentDetailView(OrganizerAndLoginRequiredMixin, generic.DetailView):
 
 class AgentUpdateView(OrganizerAndLoginRequiredMixin, generic.UpdateView):
     template_name= "agent-update.html"
-    queryset = Agent.objects.all()
     form_class = AgentModelForm
+
+    def get_queryset(self):
+        user = self.request.user
+        return Agent.objects.filter(organization = user.userprofile)
 
     def get_success_url(self):
         return reverse("agents:agent-list")

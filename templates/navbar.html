@@ -1,36 +1,31 @@
 <header class="text-gray-600 body-font">
   <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-    <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full" viewBox="0 0 24 24">
-        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-      </svg>
-      <span class="ml-3 text-xl">Dj CRM</span>
-    </a>
-    <nav class="md:ml-auto flex flex-wrap items-center text-base justify-center">
-    {%if not request.user.is_authenticated%}
-      <a href = "{% url 'signup' %}" class="mr-5 hover:text-gray-900">Sign Up</a>
-    {% else %}
-      <a href = "{% url 'leads:lead-list' %}"class="mr-5 hover:text-gray-900">Leads</a>
-      {%if request.user.is_organizer%}
-      <a href = "{% url 'agents:agent-list' %}"class="mr-5 hover:text-gray-900">Agents</a>
+    <nav class="flex lg:w-2/5 flex-wrap items-center text-base md:ml-auto">
+    {% if request.user.is_authenticated %}
+      <a href = "{% url 'leads:lead-list' %}" class="text-white bg-gray-800 rounded-md mr-5 p-2 hover:text-blue-400 ">Leads</a>
+      {% if  request.user.is_organizer%}
+      <a href = "{% url 'agents:agent-list' %}" class="text-white bg-gray-800 rounded-md mr-5 p-2 hover:text-blue-400">Agents</a>
       {% endif %}
+      <a href = "{% url 'leads:category-list' %}" class="text-white bg-gray-800 rounded-md mr-5 p-2 hover:text-blue-400">Categories</a>
     {% endif %}
     </nav>
     {%if request.user.is_authenticated%}
-    Logged In as : {{request.user.username}}
-     <a href = "{% url 'logout' %}" class=" ml-3 inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
-    Logout
-      <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24">
-        <path d="M5 12h14M12 5l7 7-7 7"></path>
-      </svg>
-    </a>
+      <a href = {% url 'leads:lead-list' %} class="flex order-first lg:order-none lg:w-1/5 title-font font-medium items-center text-gray-900 lg:items-center lg:justify-center mb-4 md:mb-0">
+        <img class="lg:w-6/12 md:w-1/6 w-5/6" src="../media/images/logo.jpg"/>
+      </a>
     {% else %}
-    <a href = "{% url 'login' %}" class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
-    Login
-      <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24">
-        <path d="M5 12h14M12 5l7 7-7 7"></path>
-      </svg>
-    </a>
+      <a href = {% url 'landing-page' %} class=class="flex order-first lg:order-none lg:w-1/5 title-font font-medium items-center text-gray-900 lg:items-center lg:justify-center mb-4 md:mb-0">
+        <img class="lg:w-6/12 md:w-1/6 w-5/6" src="../media/images/logo.jpg"/>
+      </a>
     {% endif %}
+    <div class="lg:w-2/5 inline-flex lg:justify-end ml-5 lg:ml-0">
+    {% if request.user.is_authenticated  %}
+      <a href = "{% url 'logout' %}" class="text-white inline-flex items-center bg-gray-800 border-0 p-2 focus:outline-none hover:text-blue-400 rounded text-base mt-4 md:mt-0">Logout
+        <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24">
+          <path d="M5 12h14M12 5l7 7-7 7"></path>
+        </svg>
+      </a>
+    {% endif %}
+    </div>
   </div>
 </header>

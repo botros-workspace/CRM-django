@@ -2,6 +2,8 @@
 {% load tailwind_filters %}
 
 {% block content %}
+{% include "navbar.html" %}
+
 <div class= "max-w-lg mx-auto">
     <form method ="post">
         {% csrf_token %}

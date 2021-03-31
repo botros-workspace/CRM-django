@@ -1,3 +1,4 @@
+import os
 """
 Django settings for crm_django project.
 
@@ -129,9 +130,11 @@ STATICFILES_DIR = [BASE_DIR / "static"]
 STATIC_ROOT = "static_root"
 AUTH_USER_MODEL = 'leads.User'
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-LOGIN_REDIRECT_URL ="/"
+LOGIN_REDIRECT_URL ="/leads"
 LOGOUT_REDIRECT_URL ="/"
 LOGIN_URL = "/login"
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 CRISPY_TEMPLATE_PACK = 'tailwind'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

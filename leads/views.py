@@ -63,6 +63,9 @@ class LeadCreateView(OrganizerAndLoginRequiredMixin, generic.CreateView):
         return reverse("leads:lead-list")
 
     def form_valid(self, form):
+        lead = form.save(commit= False)
+        lead.organization = self.request.user.userprofile
+        lead.save()
         send_mail(
             subject = "A lead has been created",
             message = "Go to the site to see the new lead",
@@ -140,17 +143,25 @@ class CategoryListView(LoginRequiredMixin, generic.ListView):
             queryset = Category.objects.filter(organization = user.agent.organization)
         return queryset
 
+
+
 class CategoryDetailView(LoginRequiredMixin, generic.DetailView):
     template_name = "category-detail.html"
     context_object_name = "category"
     #use this method when you want to perform a more complex queryset, instead of rendering through the leads that belongs to that category inside of the html 
-    #  def get_context_data(self, **kwargs):
-    #     context = super(CategoryListView, self).get_context_data(**kwargs)
-    #     leads = self.get_object().leads.all()
-    #     context.update({
-    #         "leads": leads
-    #     })
-    #     return context 
+    def get_context_data(self, **kwargs):
+        user = self.request.user
+        context = super(CategoryDetailView, self).get_context_data(**kwargs)
+        if user.is_organizer:
+            leads = self.get_object().leads.filter(organization = user.userprofile)
+        else:
+            leads = self.get_object().leads.filter(organization = user.agent.organization)
+            leads = leads.filter(agent__user = user)
+            
+        context.update({
+            "leads": leads
+        })
+        return context 
         
     def get_queryset(self):
         user = self.request.user
@@ -176,7 +187,8 @@ class LeadCategoryUpdateView(LoginRequiredMixin, generic.UpdateView):
         return queryset
 
     def get_success_url(self):
-        return reverse("leads:lead-detail", kwargs={"pk": self.get_object().id})
+        return reverse("leads:lead-list")
+        # return reverse("leads:lead-detail", kwargs={"pk": self.get_object().id})
 
 #function based View
 def landing_page(request):
