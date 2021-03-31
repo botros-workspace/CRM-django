@@ -1,0 +1,40 @@
+{% load static %}
+{% load tailwind_filters %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CRM</title>
+    <link href="{%static 'css/styles.css'%}" rel="stylesheet">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class= " mt-10 max-w-5xl mx-auto">
+      
+        <header class="text-gray-600 body-font">
+            <div class="mt-5 mb-5 max-w-lg">
+            <a href = "{% url 'leads:category-list' %}" class="text-white inline-flex items-center bg-gray-500 border-0 py-1 px-3 focus:outline-none hover:bg-blue-400 rounded text-base mt-4 md:mt-0">Back
+            </a>
+            </div>
+            
+        </header>
+       <section class="text-gray-600 body-font overflow-hidden">
+          <div class=" max-w-7xl  mx-auto">
+            <div class="w-full mx-auto">
+              <div class=" w-full mb-6 lg:mb-0">
+                <h1 class="text-gray-900 text-3xl title-font font-medium mb-4">{{category.name}}</h1>
+                 <form method ="post">
+                  {% csrf_token %}
+                  {{form|crispy}}
+                  <button class = " mt-1 mb-20 text-white w-full bg-gray-500 hover:bg-blue-400 px-3 py-2 rounded-md" type = "submit">Update</button>
+                </form>
+                </div>
+              </div>
+            </div>
+          </div>
+</section>
+    </div>
+</body>
+</html>

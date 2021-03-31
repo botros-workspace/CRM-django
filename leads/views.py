@@ -213,6 +213,17 @@ class LeadCategoryDelete(OrganizerAndLoginRequiredMixin, generic.DeleteView):
     def get_success_url(self):
         return reverse("leads:category-list")
 
+class CategoryUpdateView(OrganizerAndLoginRequiredMixin, generic.UpdateView):
+    template_name= "category-update.html"
+    form_class= CategoryModelForm
+    
+    def get_queryset(self):
+        user = self.request.user
+        return Category.objects.filter(organization = user.userprofile)
+
+    def get_success_url(self):
+        return reverse("leads:category-list")
+        
 #function based View
 def landing_page(request):
     return render(request, "landing-page.html", )
