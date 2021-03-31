@@ -56,9 +56,11 @@
                                     </div>
                                 </td>
                                 {% if request.user.is_organizer %}
-                                <td class="py-3 px-6 text-center">
+                                <td class="py-3 px-6 text-left">
                                     <div class=" text-black items-center justify-center">
-                                        <span>{{lead.agent}}</span>
+                                        <a href ="{% url 'leads:assign-agent' lead.pk%}" class ="ml-10">
+                                            <span class = "bg-yellow-600 rounded-full text-center py-1 px-2 text-white hover:text-gray-400 font-medium">{{lead.agent}}</span>
+                                        </a>
                                     </div>
                                 </td>
                                 {% endif %}
