@@ -109,6 +109,8 @@
                                     </div>
                                 </td>
                             </tr>
+                            {%empty%}
+                            <p>There are currently no Leads</p>
                         {% endfor %}
                         </tbody>
                     </table>
@@ -136,6 +138,7 @@
                                                 <th class="py-3 px-6 text-center">Email</th>
                                                 <th class="py-3 px-6 text-center">Contacted</th>
                                                 <th class="py-3 px-6 text-center">Category</th>
+                                                <th class="py-3 px-6 text-center">Assign</th>
                                                 {% if request.user.is_organizer %}
                                                 <th class="py-3 px-6 text-center">Edit</th>
                                                 {% else %}
@@ -162,22 +165,29 @@
                                                         <span>{{lead.email}}</span>
                                                     </div>
                                                 </td>
-                                                <td class="py-3 px-6 text-center">
+                                                <td class=" text-center">
                                                     {% if lead.contacted %}
-                                                    <a href ="{% url 'leads:lead-category-update' lead.pk%}" class ="text-black py-1 px-3 rounded-full bg-yellow-400 hover:bg-blue-400 ml-10">
+                                                    <a href ="{% url 'leads:lead-category-update' lead.pk%}" class ="text-black py-1 px-2 rounded-full bg-yellow-400 hover:bg-blue-400 ml-10">
                                                         Contacted
                                                     </a>
                                                     {% else %}
-                                                    <a href ="{% url 'leads:lead-category-update' lead.pk%}" class =" py-1 px-3 rounded-full bg-red-800 text-white hover:bg-green-400 ml-10">
+                                                    <a href ="{% url 'leads:lead-category-update' lead.pk%}" class =" py-1 px-2 rounded-full bg-red-800 text-white hover:bg-green-400 ml-10">
                                                         Not Contacted
                                                     </a>
                                                     {% endif %}
                                                 </td>
-                                                <td class="py-3 px-6 text-center whitespace-nowrap">
+                                                <td class=" text-center whitespace-nowrap">
                                                     <div class=" items-center">
                                                     <a href ="{% url 'leads:lead-category-update' lead.pk%}" class ="ml-10">
                                                         <span class="hover:text-blue-400 font-medium">{{lead.category}}</span>
                                                     </a>
+                                                    </div>
+                                                </td>
+                                                 <td class=" text-center">
+                                                    <div class=" text-black items-center justify-center">
+                                                        <a href ="{% url 'leads:assign-agent' lead.pk%}" class ="ml-10">
+                                                            <span class="bg-yellow-600 rounded-full text-center py-1 px-2 text-white hover:text-gray-400 font-medium">Assign Agent</span>
+                                                        </a>
                                                     </div>
                                                 </td>
                                                 <td class="py-3 px-6 text-center">
