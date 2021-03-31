@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from .models import Lead, Category
 from django.views import generic
-from .forms import LeadModelForm, CustomUserCreationForm, AssignAgentForm, LeadCategoryUpdateForm
+from .forms import LeadModelForm, CustomUserCreationForm, AssignAgentForm, LeadCategoryUpdateForm, CategoryModelForm
 from agents.mixins import OrganizerAndLoginRequiredMixin
 
 #class based View
@@ -189,6 +189,29 @@ class LeadCategoryUpdateView(LoginRequiredMixin, generic.UpdateView):
     def get_success_url(self):
         return reverse("leads:lead-list")
         # return reverse("leads:lead-detail", kwargs={"pk": self.get_object().id})
+
+class LeadCategoryAdd(OrganizerAndLoginRequiredMixin, generic.CreateView):
+    template_name= "category-add.html"
+    form_class= CategoryModelForm
+    
+    def get_success_url(self):
+        return reverse("leads:category-list")
+
+    def form_valid(self, form):
+        category = form.save(commit= False)
+        category.organization = self.request.user.userprofile
+        category.save()
+        return super(LeadCategoryAdd, self).form_valid(form)
+
+class LeadCategoryDelete(OrganizerAndLoginRequiredMixin, generic.DeleteView):
+    template_name= "category-delete.html"
+  
+    def get_queryset(self):
+        user = self.request.user
+        return Category.objects.filter(organization = user.userprofile)
+        
+    def get_success_url(self):
+        return reverse("leads:category-list")
 
 #function based View
 def landing_page(request):

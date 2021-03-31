@@ -22,7 +22,8 @@ class CategoryModelForm(forms.ModelForm):
     class Meta:
         model = Category
         fields = (
-            'name', 
+            'name',
+            'description', 
         ) 
 
 class CustomUserCreationForm(UserCreationForm):
